@@ -50,7 +50,7 @@ This project is a DNS record management tool for updating DNS records on the OVH
 1. Docker run
 
     ```docker
-    docker run --name dsn-updater --restart unless-stopped -p 8501:8501 ghcr.io/tbillaudeau/ovh-dns-updater:main 
+    docker run --name dsn-updater --restart unless-stopped -p 8501:8501 ghcr.io/tbillaudeau/dns-updater-ovh:main
      ```
 
 2. Docker compose
@@ -61,7 +61,7 @@ This project is a DNS record management tool for updating DNS records on the OVH
     services:
     app:
         container_name: dsn-updater
-        image: ghcr.io/tbillaudeau/ovh-dns-updater:main
+        image: ghcr.io/tbillaudeau/dns-updater-ovh:main
         restart: unless-stopped
         ports:
         - 8501:8501
