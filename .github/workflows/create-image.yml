@@ -28,12 +28,14 @@ jobs:
           id: repo
           run: echo "::set-output name=repo::$(echo ${{ github.repository }} | awk '{print tolower($0)}')"
 
-        - name: Build and push Docker image
+        - name: Build, tag, and push Docker image
           uses: docker/build-push-action@v2
           with:
             context: .
             push: true
-            tags: ghcr.io/${{ steps.repo.outputs.repo }}:latest
+            tags: |
+              ghcr.io/${{ steps.repo.outputs.repo }}:latest
+              ghcr.io/${{ steps.repo.outputs.repo }}:${{ github.ref_name }}
 
         - name: Install gh cli
           run: |
@@ -43,12 +45,11 @@ jobs:
             && sudo apt update \
             && sudo apt install gh -y
 
-        - name: Upload Docker image as release asset
+        - name: Save and upload Docker image as release asset
           env:
             GH_TOKEN: ${{ secrets.TOKEN_GITHUB }}
           run: |
             IMAGE_ID=ghcr.io/${{ steps.repo.outputs.repo }}
-            IMAGE_TAG=$(echo ${{ github.ref }} | sed 's/.*\///')
-            docker tag $IMAGE_ID:latest $IMAGE_ID:$IMAGE_TAG
+            IMAGE_TAG=${{ github.ref_name }}
             docker save $IMAGE_ID:$IMAGE_TAG -o image.tar
             gh release upload $IMAGE_TAG image.tar --clobber
