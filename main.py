@@ -113,7 +113,7 @@ def main():
             record_details = [get_dns_record(client, selected_dns_zone, record_id) for record_id in records][::-1]
             df = pd.DataFrame(record_details)
             df_placeholder = st.empty()  # Create a placeholder for the DataFrame
-            df_placeholder.markdown(df.to_html(index=False), unsafe_allow_html=True)  # Display the DataFrame in the placeholder
+            df_placeholder.dataframe(df, use_container_width=True)  # Display the DataFrame in the placeholder
 
         with col2:
             # st.text('Manage')
